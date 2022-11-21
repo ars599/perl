@@ -1,0 +1,7 @@
+ ! NOAA/PMEL TMAP
+ ! Program FERRET  
+ ! Version 5.22 - 07/27/00
+ !  6-Feb-01 14:05     
+
+GO "$HOME/.ferret"
+exit

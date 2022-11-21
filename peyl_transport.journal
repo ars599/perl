@@ -1,0 +1,655 @@
+; IDL Version 6.3 (linux x86 m32)
+; Journal File for peylin@asterix3
+; Working directory: /home/users/peylin/idl/lib/PEYL
+; Date: Sun Dec 17 19:19:06 2006
+ 
+test
+;Grid LMDZ96 found ; dim =  96 73
+;----- Treating nt observations :           36 1998:1:15 2000:12:15
+;------ Flux provided (type/dt/nt/ny): months       30.458333          60       5
+;------- Flux needed :         1095 1998:1:1 2000:12:31
+;Define a daily time step flux from original flux
+;Chtime: dt_champ_out considered as time step in days : regular spacing !
+;Chtime Warning : 29 Feb for leap year NOT USED !!
+;Chtime output defined : nn/deb/fin         1825 1997:1:1:12 2001:12:31:12
+;Chtime: Interpolation of the field
+;Total flux : orig/used   2.71377e+10  5.22234e+10
+;Units of fluxes should be in KgC/hour ! 
+;Retro plume for         1998           1          15
+;  read: backrun.lmdz96.histrac.1.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m07.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m06.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m05.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m04.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m03.nc
+;  read: backrun.lmdz96.histrac.1.an1997.m02.nc
+;Date retro (nb/deb/fin):          365 1998:1:31 1997:2:1
+;Deb of valid retro  1998:1:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0          30        1064        1094
+;Retro plume for         1998           2          15
+;  read: backrun.lmdz96.histrac.2.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m07.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m06.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m05.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m04.nc
+;  read: backrun.lmdz96.histrac.2.an1997.m03.nc
+;Date retro (nb/deb/fin):          365 1998:2:28 1997:3:1
+;Deb of valid retro  1998:2:28
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0          58        1036        1094
+;Retro plume for         1998           3          15
+;  read: backrun.lmdz96.histrac.3.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m07.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m06.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m05.nc
+;  read: backrun.lmdz96.histrac.3.an1997.m04.nc
+;Date retro (nb/deb/fin):          365 1998:3:31 1997:4:1
+;Deb of valid retro  1998:3:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0          89        1005        1094
+;Retro plume for         1998           4          15
+;  read: backrun.lmdz96.histrac.4.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m07.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m06.nc
+;  read: backrun.lmdz96.histrac.4.an1997.m05.nc
+;Date retro (nb/deb/fin):          365 1998:4:30 1997:5:1
+;Deb of valid retro  1998:4:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         119         975        1094
+;Retro plume for         1998           5          15
+;  read: backrun.lmdz96.histrac.5.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m07.nc
+;  read: backrun.lmdz96.histrac.5.an1997.m06.nc
+;Date retro (nb/deb/fin):          365 1998:5:31 1997:6:1
+;Deb of valid retro  1998:5:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         150         944        1094
+;Retro plume for         1998           6          15
+;  read: backrun.lmdz96.histrac.6.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m08.nc
+;  read: backrun.lmdz96.histrac.6.an1997.m07.nc
+;Date retro (nb/deb/fin):          365 1998:6:30 1997:7:1
+;Deb of valid retro  1998:6:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         180         914        1094
+;Retro plume for         1998           7          15
+;  read: backrun.lmdz96.histrac.7.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.7.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.7.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.7.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.7.an1997.m09.nc
+;  read: backrun.lmdz96.histrac.7.an1997.m08.nc
+;Date retro (nb/deb/fin):          365 1998:7:31 1997:8:1
+;Deb of valid retro  1998:7:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         211         883        1094
+;Retro plume for         1998           8          15
+;  read: backrun.lmdz96.histrac.8.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.8.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.8.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.8.an1997.m10.nc
+;  read: backrun.lmdz96.histrac.8.an1997.m09.nc
+;Date retro (nb/deb/fin):          365 1998:8:31 1997:9:1
+;Deb of valid retro  1998:8:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         242         852        1094
+;Retro plume for         1998           9          15
+;  read: backrun.lmdz96.histrac.9.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.9.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.9.an1997.m11.nc
+;  read: backrun.lmdz96.histrac.9.an1997.m10.nc
+;Date retro (nb/deb/fin):          365 1998:9:30 1997:10:1
+;Deb of valid retro  1998:9:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         272         822        1094
+;Retro plume for         1998          10          15
+;  read: backrun.lmdz96.histrac.10.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.10.an1997.m12.nc
+;  read: backrun.lmdz96.histrac.10.an1997.m11.nc
+;Date retro (nb/deb/fin):          365 1998:10:31 1997:11:1
+;Deb of valid retro  1998:10:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         303         791        1094
+;Retro plume for         1998          11          15
+;  read: backrun.lmdz96.histrac.11.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m01.nc
+;  read: backrun.lmdz96.histrac.11.an1997.m12.nc
+;Date retro (nb/deb/fin):          365 1998:11:30 1997:12:1
+;Deb of valid retro  1998:11:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         333         761        1094
+;Retro plume for         1998          12          15
+;  read: backrun.lmdz96.histrac.12.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m02.nc
+;  read: backrun.lmdz96.histrac.12.an1998.m01.nc
+;Date retro (nb/deb/fin):          365 1998:12:31 1998:1:1
+;Deb of valid retro  1998:12:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         364         730        1094
+;Retro plume for         1999           1          15
+;  read: backrun.lmdz96.histrac.1.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m03.nc
+;  read: backrun.lmdz96.histrac.1.an1998.m02.nc
+;Date retro (nb/deb/fin):          365 1999:1:31 1998:2:1
+;nretro/nextrapol :          365          31
+;Deb of valid retro  1999:1:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         395         699        1094
+;Retro plume for         1999           2          15
+;  read: backrun.lmdz96.histrac.2.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m04.nc
+;  read: backrun.lmdz96.histrac.2.an1998.m03.nc
+;Date retro (nb/deb/fin):          365 1999:2:28 1998:3:1
+;nretro/nextrapol :          365          59
+;Deb of valid retro  1999:2:28
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         423         671        1094
+;Retro plume for         1999           3          15
+;  read: backrun.lmdz96.histrac.3.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m05.nc
+;  read: backrun.lmdz96.histrac.3.an1998.m04.nc
+;Date retro (nb/deb/fin):          365 1999:3:31 1998:4:1
+;nretro/nextrapol :          365          90
+;Deb of valid retro  1999:3:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         454         640        1094
+;Retro plume for         1999           4          15
+;  read: backrun.lmdz96.histrac.4.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m06.nc
+;  read: backrun.lmdz96.histrac.4.an1998.m05.nc
+;Date retro (nb/deb/fin):          365 1999:4:30 1998:5:1
+;nretro/nextrapol :          365         120
+;Deb of valid retro  1999:4:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         484         610        1094
+;Retro plume for         1999           5          15
+;  read: backrun.lmdz96.histrac.5.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m07.nc
+;  read: backrun.lmdz96.histrac.5.an1998.m06.nc
+;Date retro (nb/deb/fin):          365 1999:5:31 1998:6:1
+;nretro/nextrapol :          365         151
+;Deb of valid retro  1999:5:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         515         579        1094
+;Retro plume for         1999           6          15
+;  read: backrun.lmdz96.histrac.6.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m08.nc
+;  read: backrun.lmdz96.histrac.6.an1998.m07.nc
+;Date retro (nb/deb/fin):          365 1999:6:30 1998:7:1
+;nretro/nextrapol :          365         181
+;Deb of valid retro  1999:6:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         545         549        1094
+;Retro plume for         1999           7          15
+;  read: backrun.lmdz96.histrac.7.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m09.nc
+;  read: backrun.lmdz96.histrac.7.an1998.m08.nc
+;Date retro (nb/deb/fin):          365 1999:7:31 1998:8:1
+;nretro/nextrapol :          365         212
+;Deb of valid retro  1999:7:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         576         518        1094
+;Retro plume for         1999           8          15
+;  read: backrun.lmdz96.histrac.8.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m10.nc
+;  read: backrun.lmdz96.histrac.8.an1998.m09.nc
+;Date retro (nb/deb/fin):          365 1999:8:31 1998:9:1
+;nretro/nextrapol :          365         243
+;Deb of valid retro  1999:8:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         607         487        1094
+;Retro plume for         1999           9          15
+;  read: backrun.lmdz96.histrac.9.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m11.nc
+;  read: backrun.lmdz96.histrac.9.an1998.m10.nc
+;Date retro (nb/deb/fin):          365 1999:9:30 1998:10:1
+;nretro/nextrapol :          365         273
+;Deb of valid retro  1999:9:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         637         457        1094
+;Retro plume for         1999          10          15
+;  read: backrun.lmdz96.histrac.10.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m12.nc
+;  read: backrun.lmdz96.histrac.10.an1998.m11.nc
+;Date retro (nb/deb/fin):          365 1999:10:31 1998:11:1
+;nretro/nextrapol :          365         304
+;Deb of valid retro  1999:10:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         668         426        1094
+;Retro plume for         1999          11          15
+;  read: backrun.lmdz96.histrac.11.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m01.nc
+;  read: backrun.lmdz96.histrac.11.an1998.m12.nc
+;Date retro (nb/deb/fin):          365 1999:11:30 1998:12:1
+;nretro/nextrapol :          365         334
+;Deb of valid retro  1999:11:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         698         396        1094
+;Retro plume for         1999          12          15
+;  read: backrun.lmdz96.histrac.12.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m02.nc
+;  read: backrun.lmdz96.histrac.12.an1999.m01.nc
+;Date retro (nb/deb/fin):          365 1999:12:31 1999:1:1
+;nretro/nextrapol :          365         365
+;Deb of valid retro  1999:12:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         729         365        1094
+;Retro plume for         2000           1          15
+;  read: backrun.lmdz96.histrac.1.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m03.nc
+;  read: backrun.lmdz96.histrac.1.an1999.m02.nc
+;Date retro (nb/deb/fin):          365 2000:1:31 1999:2:1
+;nretro/nextrapol :          365         396
+;Deb of valid retro  2000:1:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         760         334        1094
+;Retro plume for         2000           2          15
+;  read: backrun.lmdz96.histrac.2.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.2.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m04.nc
+;  read: backrun.lmdz96.histrac.2.an1999.m03.nc
+;Date retro (nb/deb/fin):          365 2000:2:28 1999:3:1
+;nretro/nextrapol :          365         424
+;Deb of valid retro  2000:2:28
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         788         306        1094
+;Retro plume for         2000           3          15
+;  read: backrun.lmdz96.histrac.3.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.3.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.3.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m05.nc
+;  read: backrun.lmdz96.histrac.3.an1999.m04.nc
+;Date retro (nb/deb/fin):          365 2000:3:31 1999:4:2
+;nretro/nextrapol :          365         456
+;Deb of valid retro  2000:3:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         820         275        1094
+;Retro plume for         2000           4          15
+;  read: backrun.lmdz96.histrac.4.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.4.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.4.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.4.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m06.nc
+;  read: backrun.lmdz96.histrac.4.an1999.m05.nc
+;Date retro (nb/deb/fin):          365 2000:4:30 1999:5:2
+;nretro/nextrapol :          365         486
+;Deb of valid retro  2000:4:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         850         245        1094
+;Retro plume for         2000           5          15
+;  read: backrun.lmdz96.histrac.5.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.5.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.5.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.5.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.5.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m07.nc
+;  read: backrun.lmdz96.histrac.5.an1999.m06.nc
+;Date retro (nb/deb/fin):          365 2000:5:31 1999:6:2
+;nretro/nextrapol :          365         517
+;Deb of valid retro  2000:5:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         881         214        1094
+;Retro plume for         2000           6          15
+;  read: backrun.lmdz96.histrac.6.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m07.nc
+;Date retro (nb/deb/fin):          365 2000:6:30 1999:7:2
+;nretro/nextrapol :          365         547
+;Deb of valid retro  2000:6:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         911         184        1094
+;Retro plume for         2000           7          15
+;  read: backrun.lmdz96.histrac.7.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m08.nc
+;Date retro (nb/deb/fin):          365 2000:7:31 1999:8:2
+;nretro/nextrapol :          365         578
+;Deb of valid retro  2000:7:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         942         153        1094
+;Retro plume for         2000           8          15
+;  read: backrun.lmdz96.histrac.8.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m09.nc
+;Date retro (nb/deb/fin):          365 2000:8:31 1999:9:2
+;nretro/nextrapol :          365         609
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0         973         122        1094
+;Retro plume for         2000           9          15
+;  read: backrun.lmdz96.histrac.9.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m10.nc
+;Date retro (nb/deb/fin):          365 2000:9:30 1999:10:2
+;nretro/nextrapol :          365         639
+;Deb of valid retro  2000:9:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0        1003          92        1094
+;Retro plume for         2000          10          15
+;  read: backrun.lmdz96.histrac.10.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m11.nc
+;Date retro (nb/deb/fin):          365 2000:10:31 1999:11:2
+;nretro/nextrapol :          365         670
+;Deb of valid retro  2000:10:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0        1034          61        1094
+;Retro plume for         2000          11          15
+;  read: backrun.lmdz96.histrac.11.an2000.m11.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m12.nc
+;Date retro (nb/deb/fin):          365 2000:11:30 1999:12:2
+;nretro/nextrapol :          365         700
+;Deb of valid retro  2000:11:30
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0        1064          31        1094
+;Retro plume for         2000          12          15
+;  read: backrun.lmdz96.histrac.12.an2000.m12.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m11.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m01.nc
+;Date retro (nb/deb/fin):          365 2000:12:31 2000:1:2
+;nretro/nextrapol :          365         731
+;Deb of valid retro  2000:12:31
+;Fin of valid retro  1998:1:1
+;i1/i2/j1/j2 :            0        1095           0        1094
+;     Reading /home/carbone/bousquet/LMDZ/RETROS/sites_backrun ...
+;     Reading /home/carbone/bousquet/LMDZ/RETROS/sites_backrun2 ...

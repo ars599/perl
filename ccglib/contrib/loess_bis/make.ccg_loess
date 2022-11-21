@@ -1,0 +1,32 @@
+#
+#This bit for IBM IAX systems
+#probably the most general
+#
+#CFLAGS = -ccWl,r -O
+#FLIBS = -lxlf90
+#
+#This bit for HP systems
+#
+#CFLAGS = -c
+#FLIBS = -lcl
+#
+#This bit for SGI systems
+#
+#CFLAGS = -c -DFORTRAN_NAMES
+#FLIBS = -lftn
+
+#This bit for DEC systems
+#
+CFLAGS = -c -DFORTRAN_NAMES
+FLIBS = -lfor
+
+OBJECTS = ccg_loess.o
+
+LIBS = -lloess -lm
+LLIB = -L/home/gcarb/contrib/idllib/ccglib/contrib/loess/src/lib
+
+crvfit:		$(OBJECTS)
+		cc $(OBJECTS) $(LLIB) $(FLIBS) $(LIBS) -o ./ccg_loess
+		rm *.o
+.c.o:
+		cc $(CFLAGS) $*.c

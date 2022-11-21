@@ -1,0 +1,190 @@
+; IDL Version 6.3 (linux x86_64 m64)
+; Journal File for peylin@obelix1
+; Working directory: /home/users/peylin/idl/lib/PEYL
+; Date: Fri Jul  6 11:56:11 2007
+ 
+test
+;Grid LMDZ96 found ; dim =  96 73
+;----- Treating observations (nt/deb/fin):            7 2000:6:15 2000:12:15
+;------ Flux provided (type/dt/nt/ny): months       30.502652          12       1
+;------- Flux needed :           92 2000:6:1 2000:8:31
+;Define a daily time step flux from original flux
+;Chtime: dt_champ_out considered as time step in days : regular spacing !
+;Chtime Warning : 29 Feb for leap year NOT USED !!
+;Chtime output defined : nn/deb/fin          365 2000:1:1:12 2000:12:31:12
+; Nb of output time step per year :          365
+;Chtime: Interpolation of the field
+;Units of fluxes should be in KgC/hour !
+;Total flux : orig/used (kgC)  -1.7571625e+11 -1.81568e+11
+;Switch flux to get North->South order
+;Retro plume for 2000:6:15
+;  read: backrun.lmdz96.histrac.6.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.6.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m08.nc
+;  read: backrun.lmdz96.histrac.6.an1999.m07.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:6:30 1999:7:2
+;Deb of valid retro  2000:6:30
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :            0          29          62          91
+;jj :      184     185     186     187     188     189     190     191     192     193     194     195     196     197
+;     198     199     200     201     202     203     204     205     206     207     208     209     210     211     212
+;     213
+;Retro plume for 2000:7:15
+;  read: backrun.lmdz96.histrac.7.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.7.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m09.nc
+;  read: backrun.lmdz96.histrac.7.an1999.m08.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:7:31 1999:8:2
+;Deb of valid retro  2000:7:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :            0          60          31          91
+;jj :      153     154     155     156     157     158     159     160     161     162     163     164     165     166
+;     167     168     169     170     171     172     173     174     175     176     177     178     179     180     181
+;     182     183     184     185     186     187     188     189     190     191     192     193     194     195     196
+;     197     198     199     200     201     202     203     204     205     206     207     208     209     210     211
+;     212     213
+;Retro plume for 2000:8:15
+;  read: backrun.lmdz96.histrac.8.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.8.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m10.nc
+;  read: backrun.lmdz96.histrac.8.an1999.m09.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:8:31 1999:9:2
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :            0          91           0          91
+;jj :      122     123     124     125     126     127     128     129     130     131     132     133     134     135
+;     136     137     138     139     140     141     142     143     144     145     146     147     148     149     150
+;     151     152     153     154     155     156     157     158     159     160     161     162     163     164     165
+;     166     167     168     169     170     171     172     173     174     175     176     177     178     179     180
+;     181     182     183     184     185     186     187     188     189     190     191     192     193     194     195
+;     196     197     198     199     200     201     202     203     204     205     206     207     208     209     210
+;     211     212     213
+;Retro plume for 2000:9:15
+;  read: backrun.lmdz96.histrac.9.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.9.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m11.nc
+;  read: backrun.lmdz96.histrac.9.an1999.m10.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:9:30 1999:10:2
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :           30         121           0          91
+;jj :      122     123     124     125     126     127     128     129     130     131     132     133     134     135
+;     136     137     138     139     140     141     142     143     144     145     146     147     148     149     150
+;     151     152     153     154     155     156     157     158     159     160     161     162     163     164     165
+;     166     167     168     169     170     171     172     173     174     175     176     177     178     179     180
+;     181     182     183     184     185     186     187     188     189     190     191     192     193     194     195
+;     196     197     198     199     200     201     202     203     204     205     206     207     208     209     210
+;     211     212     213
+;Retro plume for 2000:10:15
+;  read: backrun.lmdz96.histrac.10.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.10.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m12.nc
+;  read: backrun.lmdz96.histrac.10.an1999.m11.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:10:31 1999:11:2
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :           61         152           0          91
+;jj :      122     123     124     125     126     127     128     129     130     131     132     133     134     135
+;     136     137     138     139     140     141     142     143     144     145     146     147     148     149     150
+;     151     152     153     154     155     156     157     158     159     160     161     162     163     164     165
+;     166     167     168     169     170     171     172     173     174     175     176     177     178     179     180
+;     181     182     183     184     185     186     187     188     189     190     191     192     193     194     195
+;     196     197     198     199     200     201     202     203     204     205     206     207     208     209     210
+;     211     212     213
+;Retro plume for 2000:11:15
+;  read: backrun.lmdz96.histrac.11.an2000.m11.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.11.an2000.m01.nc
+;  read: backrun.lmdz96.histrac.11.an1999.m12.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:11:30 1999:12:2
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :           91         182           0          91
+;jj :      122     123     124     125     126     127     128     129     130     131     132     133     134     135
+;     136     137     138     139     140     141     142     143     144     145     146     147     148     149     150
+;     151     152     153     154     155     156     157     158     159     160     161     162     163     164     165
+;     166     167     168     169     170     171     172     173     174     175     176     177     178     179     180
+;     181     182     183     184     185     186     187     188     189     190     191     192     193     194     195
+;     196     197     198     199     200     201     202     203     204     205     206     207     208     209     210
+;     211     212     213
+;Retro plume for 2000:12:15
+;  read: backrun.lmdz96.histrac.12.an2000.m12.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m11.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m10.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m09.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m08.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m07.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m06.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m05.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m04.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m03.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m02.nc
+;  read: backrun.lmdz96.histrac.12.an2000.m01.nc
+;Eliminate 29 of February!
+;Date retro (nb/deb/fin):          365 2000:12:31 2000:1:2
+;Deb of valid retro  2000:8:31
+;Fin of valid retro  2000:6:1
+;i1/i2/j1/j2 :          122         213           0          91
+;jj :      122     123     124     125     126     127     128     129     130     131     132     133     134     135
+;     136     137     138     139     140     141     142     143     144     145     146     147     148     149     150
+;     151     152     153     154     155     156     157     158     159     160     161     162     163     164     165
+;     166     167     168     169     170     171     172     173     174     175     176     177     178     179     180
+;     181     182     183     184     185     186     187     188     189     190     191     192     193     194     195
+;     196     197     198     199     200     201     202     203     204     205     206     207     208     209     210
+;     211     212     213
+;     Reading /home/carbone/bousquet/LMDZ/RETROS/sites_backrun ...
+;     Reading /home/carbone/bousquet/LMDZ/RETROS/sites_backrun2 ...

@@ -1,0 +1,186 @@
+;========================================================================
+; NAME:
+;       ZP_loadct
+;Authors: 
+;	Z. Poussi, LSCE
+;
+; PURPOSE: Load a color table from the file 
+;         /home/users/poussi/IDL/LIB/COLORSTABLE/zp_colors1.tbl'
+;         This file includes the idl default color tables (index 1 to 40)
+;         and  additional tables (indices 41-61)
+;
+; KEYWORDS: same keywords as loadct (bottom, ncolors, get_names,silent).
+;   Please, see the idl distribution help for details
+; SPECIFIC KEYWORDS: 
+;   - COLORINDEXES: set this keyword to a naming initialized variable to
+;    get the indexes of the different discrete colors defined in the 
+;    color table your are loading. Normally the first two (0, 1)
+;    and the last  (255) indexes are reserved for black, grey and white.
+;
+; CALLING SEQUENCE:
+;       
+;
+; INPUTS:
+;     
+;
+; OPTIONAL INPUT PARAMETERS:
+; 
+;
+; OUTPUTS:
+;
+;       
+; RESTRICTIONS:
+; 
+;
+;========================================================================
+
+PRO zp_loadct,table_number,help=help,ncolors=ncolors,$
+	bottom=bottom,get_names=names,RGB_TABLE = rgbtable, $
+	COLORINDEXES=colorindexes, $
+	silent=silent
+
+	compile_opt idl2
+	on_ioerror, bad
+	on_error, 2;Return to caller if error
+	
+	rgbTable = Arg_Present(rgbTable)
+	names = Arg_Present(names)
+
+	;if(keyword_set(help)) then begin 
+	;	zp_help			;call zp_help
+	;	goto,END_
+	;endif
+	NcolLayer = !D.TABLE_SIZE; default level of colors
+	if(not(keyword_set(bottom))) then bottom = 0
+	if(not(keyword_set(silent))) then silent = ''
+	if(n_elements(rgbtable) eq 0) then rgbtable = ''
+
+	ColTablePath='/flurry/home/fdelage/LIB/idl/COLORSTABLE/'
+	colTableFile = ColTablePath + 'zp_colors1.tbl'
+	indexFile =  ColTablePath + 'zp_color_index.dat'
+	;Number of colors in the added tables
+	;nbcol=[252L,252L,252L,252L,252L,248L,250L,252L,252L,248L,250L,252L,240L,250L,252L,253L,252L,250L]
+	nbcol=[256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L,256L]
+	
+	InitialIndex = 41 ;Next index available in the idl colorstable
+	FillValue=255
+	
+	coltablesNames=[ $
+		'B-W LINEAR',$
+		'BLUE/WHITE',$
+		'GRN-RED-BLU-WHT',$
+		'RED TEMPERATURE',$
+		'BLUE/GREEN/RED/YELLOW',$
+		'STD GAMMA-II',$
+		'PRISM',$
+		'RED-PURPLE',$
+		'GREEN/WHITE LINEAR',$
+		'GRN/WHT EXPONENTIAL',$
+		'GREEN-PINK',$
+		'BLUE-RED',$
+		'16 LEVEL',$
+		'RAINBOW',$
+		'STEPS',$
+		'STERN SPECIAL',$
+		'Haze',$
+		'Blue - Pastel - Red',$
+		'Pastels',$
+		'Hue Sat Lightness 1',$
+		'Hue Sat Lightness 2',$
+		'Hue Sat Value 1',$
+		'Hue Sat Value 2',$
+		'Purple-Red + Stripes',$
+		'Beach',$
+		'Mac Style',$
+		'Eos A',$
+		'Eos B',$
+		'Hardcandy',$
+		'Nature',$
+		'Ocean',$
+		'Peppermint',$
+		'Plasma',$
+		'Blue-Red',$
+		'Rainbow',$
+		'Blue Waves',$
+		'Volcano',$
+		'Waves',$
+		'Rainbow18',$
+		'Rainbow + white',$
+		'Rainbow + black',$
+		'rgb_BlueToDarkOrangeSteps12',$
+		'rgb_BlueToDarkOrangeSteps18',$
+		'rgb_BlueToDarkRedSteps12',$
+		'rgb_BlueToDarkRedSteps18',$
+		'rgb_BlueToGreenSteps14',$
+		'rgb_BlueToGreySteps8',$
+		'rgb_BlueToOrangeSteps10',$
+		'rgb_BlueToOrangeSteps12',$
+		'rgb_BlueToOrangeSteps14',$
+		'rgb_BlueToOrangeSteps8',$
+		'rgb_BrownToBlueSteps10',$
+		'rgb_BrownToBlueSteps12',$
+		'rgb_GreenToMagentaSteps16',$
+		'rgb_LightBlueToDarkBlueSteps10',$
+		'rgb_LightBlueToDarkBlueSteps7',$
+		'rgb_ModifiedSpectrSchSteps11',$
+		'rgb_PairedColCategSteps12',$
+		'rgb_SteppedSeqSch5huesx5sat',$
+		'rgb_PlotPalette16',$
+		'rgb_DarkRedToBlueSteps18',$
+		'rgb_PlotPalette18',$
+		'rgb_PlotPalette31',$
+		'rgb_PlotPalette32']
+	
+	Ntables = n_elements(coltablesNames)
+	if(keyword_set(colorindexes)) then begin
+		nbcol = Ntables-InitialIndex
+		indexes = read_binary(indexFile,data_dims=[nbcol,256])
+		colorindexes = reform(indexes[table_number-InitialIndex,*])
+	endif 
+
+	tab={TABLE,name:"",ncol:NcolLayer,index:0l}
+	coltab=replicate(tab,Ntables)
+	if n_params() lt 1 then begin	;Summarize table?
+		nlines = (ntables + 2) / 3	;# of lines to print
+		nend = nlines - ((nlines*3) - ntables)
+		for i=0, nend-1 do $		;Print each line
+	  		print, format="(i2,'- ',a17, 3x, i2,'- ',a17, 3x, i2,'- ',a17)", $
+	  		i, coltablesNames[i], i+nlines, coltablesNames[i+nlines], i+2*nlines < (ntables-1), $
+			coltablesNames[i+2*nlines < (ntables-1)]
+			if (nend lt nlines) then begin
+				for i=nend, nlines-1 do $
+					print, format="(i2,'- ',a17, 3x, i2,'- ',a17)", $
+					i, coltablesNames[i], i+nlines, coltablesNames[i+nlines]
+			endif
+			table_number = 0
+		read, table_number, PROMPT='Enter table number: '
+	endif
+
+	for index = 0, (Ntables-1) do begin
+		coltab[index].name = coltablesNames[index]
+		coltab[index].index = index
+		;if(index gt 40) then coltab(index).ncol = nbcol[(index - InitialIndex)]
+	endfor
+
+	if( not(keyword_set(ncolors))) then ncolors = coltab[table_number].ncol
+
+	if(keyword_set(rgbtable)) then begin
+		if(keyword_set(NAMES)) then $
+			loadct, table_number,RGB_TABLE = rgbtable,$
+			FILE=colTableFile,BOTTOM=bottom, GET_NAMES=names, NCOLORS=ncolors,SILENT=silent $
+		else $
+			loadct, table_number,RGB_TABLE = rgbtable,$
+			FILE=colTableFile,BOTTOM=bottom, NCOLORS=ncolors,SILENT=silent
+	endif $
+	else begin
+		if(keyword_set(NAMES)) then $
+			loadct, table_number,$
+			FILE=colTableFile,BOTTOM=bottom, GET_NAMES=names, NCOLORS=ncolors,SILENT=silent $
+		else $
+			loadct, table_number,FILE=colTableFile,BOTTOM=bottom, NCOLORS=ncolors,SILENT=silent
+	endelse
+
+bad:
+END_:
+END
+

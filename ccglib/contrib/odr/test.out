@@ -1,0 +1,28 @@
+ ******************************************************* 
+ * ODRPACK VERSION 2.01 OF 06-19-92 (DOUBLE PRECISION) * 
+ ******************************************************* 
+
+
+ *** FINAL SUMMARY FOR FIT BY METHOD OF ODR ***
+
+ --- STOPPING CONDITIONS:
+         INFO =     1 ==> SUM OF SQUARES CONVERGENCE.
+        NITER =     8          (NUMBER OF ITERATIONS)
+         NFEV =    42          (NUMBER OF FUNCTION EVALUATIONS)
+        IRANK =     0          (RANK DEFICIENCY)
+        RCOND =     4.54D-01   (INVERSE CONDITION NUMBER)
+        ISTOP =     0          (RETURNED BY USER FROM SUBROUTINE FCN)
+
+ --- FINAL WEIGHTED SUMS OF SQUARES       =                     1.41591866D+00
+         SUM OF SQUARED WEIGHTED DELTAS   =    1.41419383D+00
+         SUM OF SQUARED WEIGHTED EPSILONS =    1.72482906D-03
+
+ --- RESIDUAL STANDARD DEVIATION          =                     2.42892180D-01
+         DEGREES OF FREEDOM               =   24
+
+ --- ESTIMATED BETA(J), J = 1, ..., NP:
+
+                     BETA      S.D. BETA    ---- 95%  CONFIDENCE INTERVAL ----
+
+       1   6.25998026D-01     1.4119D+00    -2.28801826D+00 TO  3.54001432D+00
+       2   2.86339554D+01     3.2635D+00     2.18983594D+01 TO  3.53695514D+01

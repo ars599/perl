@@ -1,0 +1,41 @@
+#
+#This bit for IBM IAX systems
+#probably the most general
+#
+CFLAGS = -O -c
+#FLIBS = -lfor
+CFLAGS = -c -DFORTRAN_NAMES
+#
+#This bit for HP systems
+#
+#CFLAGS = -c
+#FLIBS = -lcl
+#
+#This bit for SGI systems
+#
+#CFLAGS = -c -DFORTRAN_NAMES
+#FLIBS = -lftn
+
+#FSUBS= /home/geo/masarie/idl/lib/ccglib/contrib/odr/odrfitf.f
+FSUBS = /home/gcarb/contrib/idllib/ccglib/contrib/odr/odrfitf.f
+
+#OBJECTS = /home/geo/masarie/idl/lib/ccglib/contrib/odr/odrfitc.o \
+#          /home/geo/masarie/idl/lib/ccglib/contrib/odr/odrfitf.o
+OBJECTS = /home/gcarb/contrib/idllib/ccglib/contrib/odr/odrfitc.o \
+	  /home/gcarb/contrib/idllib/ccglib/contrib/odr/odrfitf.o
+
+#INCL = -L/home/geo/masarie/idl/lib/ccglib/contrib/odr/src
+INCL = -L/home/gcarb/contrib/idllib/ccglib/contrib/odr/src
+LIBS = -lodrpack -lm
+
+odrfit:		$(OBJECTS)
+		gfortran $(OBJECTS) $(INCL) $(FLIBS) $(LIBS) -o ./odrfit
+		rm *.o
+
+.f.o:		$(FSUBS)
+		ifort -c $< -o $*.o
+.c.o:
+		gfortran $(CFLAGS) $*.c
+
+
+

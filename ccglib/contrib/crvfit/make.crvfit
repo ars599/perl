@@ -1,0 +1,38 @@
+#
+#This bit for IBM IAX systems
+#probably the most general
+#
+#CFLAGS = -ccWl,r -O
+#FLIBS = -lxlf90
+#
+#This bit for HP systems
+#
+#CFLAGS = -c
+#FLIBS = -lcl
+#
+#This bit for SGI systems
+#
+#CFLAGS = -c -DFORTRAN_NAMES
+#FLIBS = -lftn
+#
+#
+#This bit for DEC systems
+#probably the most general
+#
+CFLAGS = -c -O -DFORTRAN_NAMES
+FLIBS = -lfor -lm
+
+FSUBS = filter_dp.f
+
+OBJECTS = crvfit.o utils.o filter_dp.o
+
+LIBS = -lm
+
+crvfit:		$(OBJECTS)
+		cc $(OBJECTS) $(FLIBS) $(LIBS) -o ./crvfit
+		rm *.o
+
+.f.o:		$(FSUBS)
+		f77 -u -c -C $< -o $*.o
+.c.o:
+		cc $(CFLAGS) $*.c

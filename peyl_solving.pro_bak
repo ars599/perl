@@ -1,0 +1,273 @@
+;+
+;========================================================================
+; NAME:
+;       PEYL_SOLVING
+;
+; PURPOSE: Sole a linear set of equation in order to optimize some parameters.
+;       
+;
+; CALLING SEQUENCE: See definition of programme
+;       
+;
+; INPUTS:
+;
+;    * MAT : array of (npar, nobs): matrice of coefficients that relates
+;             the derivative of the modeled output with respect to the parameters
+;             npar=nb parametres / nobs= nb observations
+;
+;    * DOBS : vector of observations (nobs)
+;
+;    * TYPE = 0: Lu decomposition for square problems
+;             1: Svd decompostion for non square problems (more or
+;                less observations than parameters)
+;             2: Complete inversion with errors (Tarantola approach)
+;                Cost function with both errors on obs and prior param 
+;                need to be set in this case..
+;                Inversion of  : [Mat^T # sig_obs^-1 # Mat + sig_par^-1]
+;             3:           (variante of 2 to invert the final matrice by cholesky)
+;             4:           (variante of 2 to invert the final matrice by LU)
+;      (DEFAULT = 1)
+;
+;
+; OPTIONAL INPUT PARAMETERS:
+; 
+;    * mprior : vector of prior value for parameters (npar)
+;               REQUESTED for type 2,3,4 
+;
+;    * sig_obs: vector of prior error value for the observations (nobs)
+;               corrospond to the standart deviations.
+;               REQUESTED for type 2,3,4 
+;
+;    * sig_par: vector of prior error value for the parameters (npar)
+;               corrospond to the standart deviations.
+;               REQUESTED for type 2,3,4 
+;
+;    * tolerance_wp : tolerance factor when the inversion implies SVD
+;    (type = 1 or 2) in order to cut the low or negative sigular
+;    values. The factor is time the maximum sigular value to define
+;    the threshold.
+;      NOT REQUESTED (default = 0)
+;
+;    * m0prior : vector of prior value for parameters (npar) of the
+;     first loop, in the case of iterative solution (cf tarantola..)
+;     NOT required if no looping..
+;   
+;    * mod_prior : Values of the model a priori in the case of non
+;    linear model; else assume to be Mat # mprior
+;      ONLY for type 2,3,4
+;      NOT REQUESTED
+;       
+;    * NOERASE: to avoid araising MAT on output if type = 0 or 1
+;      NOT REQUESTED
+;
+;    * NOINFO: to avoid messages..
+;
+;
+; OUTPUTS:
+;
+;    * MPOSTE : vector of optimised parameters (npar).
+;      REQUESTED
+;
+;    * mcov : matrice of variance/covariance on output for the
+;    parameters (npar,npar)
+;      NOT REQUESTED
+;
+;    * dcov : matrice of variance/covariance on output for the
+;    observations (nobs,nobs)
+;      NOT REQUESTED
+;
+;    * wp : vector of sigular values if SVD utilised (type 1 or 2)
+;      NOT REQUESTED
+;
+;
+; RESTRICTIONS:
+; 
+;
+;========================================================================
+PRO peyl_solving, mat, $
+                  dobs, $
+                  mposte, $
+                  type=type,$
+                  mprior=mprior, $
+                  sig_obs=sig_obs,$
+                  sig_par=sig_par,$
+                  mcov=mcov,$
+                  mcor=mcor,$
+                  dcov=dcov,$
+                  chi2val=chi2val,$
+                  m0prior=m0prior,$
+                  mod_prior=mod_prior, $
+                  wp=wp,$
+                  tolerance_wp=tolerance_wp,$
+                  noinfo=noinfo,$
+                  noerase=noerase
+
+
+ON_ERROR,2
+
+if not ccg_vdef(type) then type = 1
+if not ccg_vdef(noerase) then noerase = 0
+if not KEYWORD_SET(noinfo) then info = 1 else info = 0
+if not ccg_vdef(tolerance_wp) then tolerance_wp = 0. 
+
+
+;------- Recalcul de npar/nobs
+npar = n_elements(mat(*,0))
+nobs = n_elements(dobs)
+
+
+;---- resolution simple sans erreurs associees pour Square matrix
+
+if type eq 0 then begin
+    if npar ne nobs then message,'Type impossible selon npar/nobs'
+    if info then print,'LU Resolution dans cas npar=nobs sans erreurs..'
+    if noerase then mat_temp = mat
+    ludc, mat, index
+    mposte = lusol(mat, index, dobs)
+    if noerase then mat = mat_temp    
+endif
+
+
+;---- resolution simple sans erreurs associees selon SVD
+
+if type eq 1 then begin
+    if info then print,'SVD Resolution sans erreurs..'
+    if noerase then mat_temp = mat
+    svdc, mat, wp, u, v
+    n = n_elements(wp)
+    MWP = fltarr(n,n)   
+    wmax = max(wp)
+    THRESH=tolerance_wp*WMAX
+    for k=0,n-1 do $
+      if (abs(wp(k)) gt THRESH) then MWP(k,k) = 1. / wp(k)
+    mposte = reform (v ## MWP ## transpose(u) ## dobs )
+    if noerase then mat = mat_temp    
+endif
+
+
+;------ Resolution complete selon tarantola..
+
+if type ge 2 then begin
+
+    if info then print,'TARANTOLA Resolution avec erreurs.. (BAYESIEN)'
+
+                                ;--- Petites verif..
+    if n_elements(mprior) ne npar then message,'Probleme mprior mal defini..' 
+    if n_elements(sig_par) ne npar then message,'Probleme sig_par mal defini..' 
+    if n_elements(sig_obs) ne nobs then message,'Probleme sig_obs mal defini..' 
+
+                                ;--- Rem: si prbl non lineaire
+                                ;    mod_prior est fournit sinon on le
+                                ;    calcul..
+    if n_elements(mod_prior) ne nobs then mod_prior = mat ## mprior
+
+                                ;--- Special pour inclure cas
+                                ;    iteratif..
+    if n_elements(m0prior) ne npar then m0prior=mprior
+
+
+;------- Calcul intermediaires (cf Tarantola, p 188)
+; REM : il faut travailler en double precision sinon 
+;       la matrice cnn n'est pas symetrique...
+
+    cm1 = dblarr(npar,npar)
+    for mu=0,npar-1 do cm1(mu,mu) = 1./(sig_par(mu))^2
+
+    cd1 = dblarr(nobs,nobs)
+    for n=0,nobs-1 do cd1(n,n) = 1./(sig_obs(n))^2
+
+                                ;-- Formule dans le cas de correlation
+                                ;   nulles
+;;;    cmn = transpose(mat) ## cd1
+    cmn = dblarr(nobs,npar)
+    for j=0,nobs-1 do for i=0,npar-1 do  cmn(j,i) = mat(i,j) * cd1(j,j)
+
+    cnn = (cmn ## mat) + cm1
+
+
+;-------- Inversion de la matrice cnn => cnn1
+
+                                ;--- Inversion selon cholesky
+    if type eq 3 then begin
+
+        if info then print,'Inversion selon cholesky decomposition'
+        cnn1 = cnn
+        CHOLDC,cnn,p,/double
+        for n=0,npar-1 do begin
+            b = dindgen(npar)
+            b(n) = 1.
+            cnn1(n,*) = CHOLSOL(cnn,p,b,/double)
+        endfor
+    endif
+
+                                ;--- Inversion selon LU
+    if type eq 4 then begin
+        if info then print,'Inversion selon LU decomposition'
+        cnn1 = cnn
+        LUDC,cnn,index,/double
+        for n=0,npar-1 do begin
+            b = dindgen(npar)
+            b(n) = 1.
+            cnn1(n,*) = LUSOL(cnn,index,b,/double)
+        endfor
+    endif 
+
+                                ;--- Inversion selon SVD
+    if type eq 2 then begin
+        if info then print,'Inversion selon SVD'
+        s = size(cnn)
+        if s(0) eq 1 then begin
+            cnn1 = 1./cnn
+        endif else svdc,cnn, wp, u, v, /double
+
+                                ;--- Calcul de cw
+        cw = wp
+        wmax = max(wp)
+        THRESH=tolerance_wp*WMAX
+        for J=0,npar-1 do begin
+            IF (CW(J) LT 0.) then begin
+                print,'valeurs propres negative dans la svd...'
+                stop
+            endif
+                                ;---- coupure des valeurs propres trop
+                                ;     petites de la matrice CW
+            IF(CW(J) LT THRESH) then CW(J)=0. 
+        endfor
+
+                                ;--- Calcul de ww
+        ww = dblarr(npar,npar)
+        for mu=0,npar-1 do if (cw(mu) ne 0.) then ww(mu,mu)=1./cw(mu)
+
+                                ;--- Inversion de cnn
+        cnn1 = v ## ww ## transpose(u)
+    endif
+
+;------- Calcul de l'eccart aux Obs.
+    ddobs = dobs - mod_prior
+    
+;------ Rajout de l'ecart a mprior initial (m0prior)
+    ddobs = temporary(ddobs) + (mat ## (mprior - m0prior)) 
+    
+;------ Calcul des covariances des parametres du model
+    mcov = cnn1
+
+;------ Calcul des correlations entre parametres du model
+    if ccg_vdef(mcor) then begin
+        mcor = fltarr(npar,npar)
+        for j=0,npar-1 do for i=0,npar-1 do cor(i,j) = mcov(i,j) / sqrt(mcov(i,i)*mcov(j,j))
+    endif
+   
+;------ Calcul des covariances des observations
+    if ccg_vdef(dcov) then dcov = mat ## mcov ## transpose (mat)
+    
+;------ Calcul final des flux a posteriori
+    mposte = m0prior + cnn1 ## cmn ## ddobs
+
+;------ Calcul final des flux a posteriori
+    if ccg_vdef(chi2val) then chi2val = total( ((dobs-mod_prior)/sig_obs)^2 ) + $
+      total( ((m0prior-mposte)/sig_par)^2 )
+
+endif 
+
+END
+;-

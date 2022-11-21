@@ -1,0 +1,723 @@
+;+
+;========================================================================
+; NAME:
+;       PEYL_MAP2D
+;
+; PURPOSE:
+;       PLOTTING 2D MAPS (POSSIBLY SEVERAL MAPS PER PAGE)
+;
+; CALLING SEQUENCE:
+;       PEYL_MAP2D,tab_ [,POS=pos,LATS=lats_,LONS=lons_,MISSING=missing,$
+;       LIMITS=limits,TITLE=title,MOLLWEIDE=mollweide,COLBAR=colbar,$
+;       VMIN=vmin,VMAX=vmax,NOCOAST=nocoast,BADCOLOR=badcolor,$
+;       NOINTERPOLATE=nointerpolate,VERTICBAR=verticbar,NOERASE=noerase,$
+;       NB_INTERVAL=nb_interval, VAL_INTERVAL=val_interval]
+;
+; INPUTS:
+;       tab_, 2D FILE. IF ALREADY IN BYTE TYPE, IT IS DIRECTLY PROJECTED.
+;       OTHERWISE, IT IS FIRST CONVERTED INTO BYTE TYPE ACCORDING TO THE
+;       COLOR PALETTE AND TO THE VALUES OF VMIN AND VMAX
+;
+; OPTIONAL INPUT PARAMETERS:
+;       POS: POSITION OF THE MAP TO BE PLOTTED, ON THE WINDOW
+;            [xmin,ymin, xmax, ymax] IN NORMALIZED COORDINATES
+;            (FROM 0, BOTTOM LEFT,TO 1, TOP RIGHT)
+;       lats_: LATITUDES FOR WHICH THE VALUES OF tab_ ARE GIVEN.
+;              IF THE VECTOR HAS ONLY 2 ELEMENTS, THEY ARE CONSIDERED
+;              AS [latmin,latmax].
+;       lons: LONGITUDES FOR WHICH THE VALUES OF tab_ ARE GIVEN.
+;             IF THE VECTOR HAS ONLY 2 ELEMENTS, THEY ARE CONSIDERED
+;             AS [lonmin,lonmax].
+;             WARNING: THE MIN/MAX VALUES OF THE LATITUDES/LONGITUDES ARE THOSE
+;             OF THE BOXES.
+;       LIMITS=[latmin,lonmin,latmax,lonmax]: ALLOWS TO PLOT A MAP
+;                                             ZOOMED ON A PART OF THE GLOBE
+;       VMIN, VMAX: VALUES MIN AND MAX OF tab_. THEY ARE USED TO CONVERT
+;                   THE PHYSICAL DATA TO THE PALETTE SCALE.
+;       MISSING= VALUE OF "NON PHYSICAL" DATA
+;       BADCOLOR: COLOR VALUE TO BE USED TO PLOT THE MISSING DATA
+;       NOCOAST: NOT TO DRAW THE COASTS
+;       MLINE_THICK : CONTINENT BORDER THICKNESS 
+;       GRID : NOT TO DRAW THE GRID
+;       MOLLWEIDE: TO USE A MOLLWEIDE TYPE PROJECTION
+;       INTERPOLATE : ALLOWS TO INTERPOLATE THE VALUES ON A
+;                     HIGHER RESOLUTION GRID (INSTEAD, NEAREST NEIGHBOUR VALUE TAKEN
+;                     TO PLOT ON THE HIGH RESOLUTION GRID)
+;       NOERASE: ALLOWS TO DRAW SEVERAL MAPS ON THE SAME PAGE AT
+;       SATURE_MINMAX : TO SATURE VALUES > VMAX WITH VMAX COLOR ( RESP FOR VMIN )
+;       X_CENTER : X-COORDINATE IMAGE CENTER
+;       Y_CENTER : Y-COORDINATE IMAGE CENTER
+;       TITLE: ALLOWS TO PUT A TITLE
+;       COL_TEXT : TEXT AND AXIS COLOR
+;
+;       COLBAR: DRAWS THE COLOR PALETTE IF THE KEYWORD ID POSITIONNED
+;       VERTICBAR: ALLOWS TO DRAW A VERTICAL COLOR BAR TO PRESENT THE
+;                  PALETTE (DEFAULT=HORIZONTAL)
+;                  POSITIONS DEFINED BY THE USER, WITHOUT STARTING A NEW PAGE
+;       DISCR_PAL : CREATES A DISCRETE PALETTE
+;       NB_INTERVAL: NUMBER OF INTERVALS SEPARATING THE TICKS ON THE COLORBAR.
+;                    IF SPECIFIED WITHOUT ANY VALUES (OR WITH ZEROS) PUT IN
+;                    THE ARRAY VAL_INTERVAL, THE NUMBER OF VALUES OF THE TICKS
+;                    IS NB_INTERVAL AND THE TICKS ARE SPACED REGULARLY
+;                    ALONG THE COLORBAR AXIS. 
+;                    IF SPECIFIED AND THE ARRAY VAL_INTERVAL FILLED WITH
+;                    NB_INTERVAL+1 VALUES, THESE TICKS ARE PUT ON THE AXIS
+;                    AND A TICK '0' IS ADDED.
+;       VAL_INTERVAL: VALUES OF THE TICKS DELIMITATING THE NB_INTERVAL
+;                     INTERVALS ON THE COLORBAR AXIS.  A TICK '0' IS
+;                     ADDED. DOES NOT WORK WITH DISCR_PAL = 1.
+;
+;       NB_COL: NUMBER OF COLORS TO BE USED TO DRAW THE MAP
+;       FIRST_COL: COLOR VALUE OF THE FIRST COLOR OF THE PALETTE TO BE
+;                  USED (DEFAULT = COLOR NUMBER 0)
+;       LEG_TITLE    : COLORBAR TITLE
+;       LEG_CHARSIZE : CHARACTER SIZE OF COLORBAR TICKNAME
+;       LEG_THICK    : THICKNESS OF COLORBAR AXIS
+;       LEG_FORMAT   : COLORBAR TICKNAME FORMAT
+;       LEG_TICKNAME_INTERVAL : VALUE OF COLORBAR  TICKNAME INTERVAL
+;                               EX --> LEG_TICKNAME_INTERVAL = 2 MEANS
+;                                      THAT ONLY ONE TICK OUT OF TWO HAS
+;                                      A TICKNAME.
+;
+;       PLOT_AXIS       : TO PLOT X AND Y AXIS (1:INTERIOR TICK,2:EXTERIOR
+;                         TICK,3:BOTH)
+;       XAXIS_INTERVAL  : VALUE OF THE X (AXIS) INTERVAL
+;       YAXIS_INTERVAL  : VALUE OF THE Y (AXIS) INTERVAL
+;
+;       LON_WEST0  : WESTERN LONGITUDE (NEEDED FOR NON-REGULAR GRID)
+;       LAT_SOUTH0 : SOUTHERN LATITUDE (NEEDED FOR NON-REGULAR GRID)
+;       DLON_RES   : RESOLUTION IN LONGITUDE FOR INTERPOLATION
+;       DLAT_RES   : RESOLUTION IN LATITUDE FOR INTERPOLATION
+;
+; OUTPUTS:
+;       WINDOW(S) WITH THE MAPS (ON SPECIFIED DEVICE: SCREEN, FILE.PS,...)
+;       EX: dev = 'psc'
+;       portrait=1
+;       file_out='toto_idl.ps'
+;       ccg_opendev,dev=dev,saveas=file_out,portrait=portrait
+;      	peyl_map2d, tab
+;
+; RESTRICTIONS:
+;       IF SEVERAL MAPS ARE TO BE PLOTTED ON THE SAME PAGE, AND IF A
+;       VERTICAL COLOR BAR IS WANTED, WHEN CALLING PEYL_MAP2D,
+;       THE USER HAS TO SET THE KEYWORD VERTICBAR FOR EACH MAP.
+;
+;       IF SEVERAL MAPS ARE TO BE PLOTTED ON THE SAME PAGE, AND IF
+;       THE MIN AND MAX VALUES ARE NOT THE SAME FOR THE PLOTS ON A SAME PAGE,
+;       THE USER HAS TO SPECIFY COMMON MIN AND MAX VALUES FOR THE PLOTS
+;       (E.G. BY USING VMIN=MIN(tab_) BEFORE) WHEN CALLING PEYL_MAP2D.
+;
+;       ATTENTION: LES COTES NE SONT PAS ENCORE AU BON ENDROIT LORSQUE
+;       !P.MULTI EST EMPLOYE POUR DEFINIR LES POSITIONS DES CARTES!...
+;       Pour dessiner plusieurs cartes, Utiliser plutot a la place de !P.MULTI:
+;       Ex:
+;       !p.multi = 0
+;       Nplots = 9
+;       pos = peyl_make_pos(Nplots,RIGHTBORD=0.95)
+;       FOR i=0,Nplots-1 DO $
+;           peyl_map2d, tab, LATS=lats,LONS=lons, LIMITS=[20,-40,80,70],$
+;               pos=pos[*,i],/colbar,/verticbar, /NOERASE
+;       ENDFOR    
+;
+;
+;
+;========================================================================
+
+PRO peyl_map2d, tab_, $
+                POS=pos,$
+                LATS=lats_, $
+                LONS=lons_, $
+                LIMITS=limits, $
+                vmin=vmin_,$
+                vmax=vmax_,$
+                limit_minmax_percent=limit_minmax_percent,$
+                MISSING=missing, $
+                BADCOLOR=badcolor, $
+                add_point=addpt,$
+                NOCOAST=nocoast,$
+                mlinethick = mlinethick,$
+                grid = grid,$
+                mollweide=mollweide,$
+                stereographic=stereographic,$
+                rotation = rotation,$
+                INTERPOLATE=interpolate, $
+                NOERASE=noerase, $
+                sature_minmax=sature_minmax,$
+                x_center = x_center,$
+                y_center = y_center,$
+                ;--
+                TITLE=title, $
+                col_text = col_text,$
+                ;-- Colorbar
+                COLBAR=colbar, $
+                VERTICBAR=verticbar,$
+                DISCR_PAL = DISCR_PAL, $
+                NB_INTERVAL=nb_interval, $
+                VAL_INTERVAL=val_interval, $
+                NB_COL=nb_col, $
+                FIRST_COL=first_col, $
+                LEG_TITLE=leg_title,$
+                leg_charsize=leg_charsize,$
+                leg_thick=leg_thick,$
+                leg_format=leg_format,$
+                leg_tickname_interval=leg_tickname_interval,$
+                ;-- Axis
+                plot_axis=plot_axis,$
+                axis_thick = axis_thick,$
+                axis_charsize=axis_charsize,$
+                xaxis_interval=xaxis_interval,$
+                yaxis_interval=yaxis_interval,$
+                ;-- Interpolation
+                lon_West0 = lon_West0,$
+                lat_South0 = lat_South0,$
+                dlon_res = dlon_res,$
+                dlat_res = dlat_res
+
+
+;------------------------------------------------------------
+;        Initializations and verifications
+;------------------------------------------------------------
+
+IF (n_elements(col_text)    EQ 0) THEN col_text = 0
+IF (n_elements(first_col)   EQ 0) THEN first_col = 0
+IF (n_elements(nb_col)      EQ 0) THEN nb_col = 256-first_col-1
+IF (n_elements(verticbar)   EQ 0) THEN verticbar = 0
+IF (n_elements(colbar)      EQ 0) THEN colbar = 0
+IF NOT KEYWORD_SET(NB_INTERVAL) THEN NB_INTERVAL=5
+IF (n_elements(discr_pal) eq 0) THEN discr_pal=0
+IF NOT KEYWORD_SET(sature_minmax) THEN sature_minmax=0
+IF NOT KEYWORD_SET(INTERPOLATE) THEN INTERPOLATE=0
+IF (n_elements(x_center) eq 0) THEN x_center = 0
+IF (n_elements(y_center) eq 0) THEN y_center = 0
+IF (n_elements(mlinethick) eq 0) THEN mlinethick = 1
+IF (n_elements(leg_charsize) eq 0) THEN leg_charsize = 0.8
+IF (n_elements(leg_thick) eq 0) THEN leg_thick = 1
+IF (n_elements(axis_thick) eq 0) THEN axis_thick = 0
+IF NOT KEYWORD_SET(LEG_TITLE) then LEG_TITLE=''
+IF NOT KEYWORD_SET(badcolor) THEN badcolor =  !P.BACKGROUND
+
+IF n_elements(mollweide) EQ 0 THEN mollweide = 0
+IF n_elements(stereographic) EQ 0 THEN stereographic = 0
+IF n_elements(rotation) EQ 0 THEN rotation = 0.
+
+if (n_elements(noerase)     EQ 0) THEN noerase = 0
+IF (n_elements(plot_axis)     EQ 0) THEN plot_axis = 0
+;--- 
+IF ((n_elements(colbar) gt 1) or colbar(0) eq 1) THEN ok_colbar=1 else ok_colbar=0
+
+IF (n_elements(dlon_res) eq 0) THEN dlon_res_def=0.5 ELSE dlon_res_def=dlon_res
+IF (n_elements(dlat_res) eq 0) THEN dlat_res_def=0.25 ELSE dlat_res_def=dlat_res
+
+IF (n_elements(limit_minmax_percent) eq 0) THEN limit_minmax_percent=0
+
+;---- Gestion des dimension du tableau a plotter
+s=size(tab_)
+IF (s(0) EQ 3) THEN BEGIN
+    print,'Tableau de dimension 3 !! : Moyenne sur la 3eme dimension !!'
+    tab = total(tab_,3)/float(s(3))
+    s = size(tab)
+ENDIF ELSE tab = tab_
+
+IF (s(0) NE 2) THEN BEGIN
+    print,'Il faut un tableau 2D dans map2d !!'
+    RETURN
+ENDIF
+
+;---- Gestion des latitudes : def latmin, latmax
+IF KEYWORD_SET(lats_) THEN BEGIN
+
+    IF N_ELEMENTS(lats_) EQ 2 THEN BEGIN
+        latmin = MIN(lats_,MAX=latmax)
+        Nlat   = s(2)
+    ENDIF ELSE BEGIN
+
+        IF N_ELEMENTS(lats_) NE s[2] THEN message,'Err Peyl_map2d : Dim latitude incompatibles'
+        ;-- In case the latitudes are not in increasing order 
+        IF (lats_[0] GT lats_[1]) THEN BEGIN
+            lats = rotate(lats_, 2)
+            tab  = ROTATE(tab,7)
+        ENDIF ELSE lats = lats_
+
+        ;-- Computes latitude minimum
+        IF (n_elements(lat_South0) NE 0) THEN BEGIN
+            latmin = double(lat_South0)
+        ENDIF ELSE BEGIN
+            latmin = (MIN(lats) - (lats(1) - lats(0))/2. ) > (-90.)
+        ENDELSE
+        
+        Nlat   = s(2)
+        ;-- Calcul des latitudes non centrées (lat_bord)
+        lat_bord = fltarr(Nlat+1)
+        lat_bord(0) = latmin
+        FOR i = 1L, Nlat DO lat_bord(i) = lat_bord(i-1) + (lats(i-1) - lat_bord(i-1)) * 2.
+        latmax = max(lat_bord)
+
+        ;-- Calcul de la résolution minimale de la grille a ploter avec un cas
+        ;   specifique pour grille reguliere/interpol=0
+        dlat = ABS(lat_bord(0:Nlat-2)-lat_bord(1:Nlat-1))
+        reso_lat = MIN(dlat)
+        dlat_res = MIN([dlat_res_def,reso_lat])
+        IF INTERPOLATE eq 0 and n_elements(uniq(dlat)) eq 1 and $
+          (n_elements(dlat_res) eq 0) THEN dlat_res = reso_lat(0)
+        Nlat_int = ceil( (latmax-latmin)/dlat_res ) 
+
+        Y    = FLTARR(Nlat_int)
+        Yint = FLTARR(Nlat_int)
+
+        ilat_1 = 0
+        ilat_2 = 0
+        FOR i = 0L, Nlat_int-1 DO BEGIN
+            ;-- Grille de projection bord sud
+            ;lat = min([latmin + i*(latmax-latmin)/FLOAT(Nlat_int),latmax])
+            ;-- Grille de projection centree
+            lat = min([latmin + (i+0.5)*(latmax-latmin)/FLOAT(Nlat_int),latmax])
+            ;-- Position du pt à droite
+            WHILE ((lats[ilat_2] LT lat) and (ilat_2 le Nlat-2)) DO ilat_2 = ilat_2 + 1
+            ;-- Position du pt à gauche
+            ilat_1 = max([ilat_2-1, 0])
+            ;-- Calcul coefficients pour interpolation
+            if ilat_1 eq ilat_2 then Y[i] = ilat_1 else Y[i] = (ilat_1 + (lat-lats[ilat_1])/(lats[ilat_2]-lats[ilat_1])) > 0. 
+            if lat le lat_bord(ilat_2) then Yint[i] = ilat_1 else Yint[i] = ilat_2
+        ENDFOR
+
+        IF (interpolate eq 0) THEN Y = Yint
+
+    ENDELSE
+
+ENDIF ELSE BEGIN
+
+    Nlat   = s(2)
+    latmin =-90. & latmax=90.
+
+ENDELSE
+    
+
+;---- Gestion des longitudes : def lonmin, lonmax
+IF KEYWORD_SET(lons_) THEN  BEGIN
+
+    IF N_ELEMENTS(lons_) EQ 2 THEN BEGIN
+        lonmin = MIN(lons_,MAX=lonmax)
+        Nlon   = s(1)
+    ENDIF ELSE BEGIN        
+
+        Nlon = s(1)
+        IF (N_ELEMENTS(lons_) NE s[1]) THEN STOP,'Err peyl_map2d : DIM Longitudes incomatible'
+        ;-- Longitudes should be in increasing order 
+        foo = sort(lons_) 
+        IF total(abs(foo-indgen(Nlon))) ne 0 THEN BEGIN
+            IF (lons_[0] GT lons_[1]) THEN $
+              stop,'Err peyl_map2d : Longitude should be in increasing order...'        
+            PRINT,'Reajustement des longitudes pour avoir des valeurs croissantes....'
+            foo = where(lons_ lt 0.,cc)
+            if cc eq 0 then message,'Big probleme peyl_map2d'
+            lons = lons_
+            lons[foo] = lons[foo] + 360.
+        ENDIF ELSE lons = lons_
+
+        ;-- Computes longitude minimum
+        IF (n_elements(lon_West0) NE 0) THEN BEGIN
+            lonmin = double(lon_West0)
+        ENDIF ELSE BEGIN
+            lonmin = MIN(lons) - (lons(1) - lons(0))/2.
+        ENDELSE
+
+        ;-- Calcul des longitudes non centrées (lon_bord)
+        lon_bord = fltarr(Nlon+1)
+        lon_bord(0) = lonmin
+        FOR i = 1L, Nlon DO lon_bord(i) = lon_bord(i-1) + (lons(i-1) - lon_bord(i-1)) * 2.
+        lonmax = max(lon_bord)
+        ;-- Calcul de la résolution minimale de la grille a ploter avec un cas
+        ;   specifique pour grille reguliere/interpol=0
+        dlon = ABS(lon_bord(0:Nlon-2)-lon_bord(1:Nlon-1))
+        reso_lon = MIN(dlon)
+        dlon_res = MIN([dlon_res_def,reso_lon])
+        IF INTERPOLATE eq 0 and n_elements(uniq(dlon)) eq 1 and $
+          (n_elements(dlon_res) eq 0) THEN dlon_res = reso_lon(0)
+        Nlon_int = ceil( (lonmax-lonmin)/dlon_res ) 
+
+        X    = FLTARR(Nlon_int)
+        Xint = FLTARR(Nlon_int)
+
+        ilon = 0
+        ilon_1 = 0
+        ilon_2 = 0
+        FOR i = 0L, Nlon_int-1 DO BEGIN
+            ;--- grille de projection bord sud
+            ;lon = min([lonmin + i*(lonmax-lonmin)/FLOAT(Nlon_int),lonmax])
+            ;--- grille de projection centree
+            lon = min([lonmin + (i+0.5)*(lonmax-lonmin)/FLOAT(Nlon_int),lonmax])
+            ;--- Position du pt à droite
+            WHILE ((lons[ilon_2] LT lon)  and (ilon_2 le Nlon-2)) DO ilon_2 = ilon_2 + 1
+            ;--- Position du pt à gauche
+            ilon_1 = max([ilon_2-1, 0])
+            ;-- Calcul coefficients pour interpolation
+            if ilon_1 eq ilon_2 then X[i]   = ilon_1 else X[i]   = (ilon_1 + (lon-lons[ilon_1])/(lons[ilon_2]-lons[ilon_1])) > 0. 
+            if lon le lon_bord(ilon_2) then Xint[i] = ilon_1 else Xint[i] = ilon_2
+        ENDFOR
+
+        IF (interpolate eq 0) THEN X = Xint
+
+    ENDELSE 
+
+ENDIF ELSE BEGIN
+
+    Nlon   = s(1)
+    lonmin =-180. & lonmax=180.
+
+ENDELSE
+
+IF (KEYWORD_SET(lons) OR KEYWORD_SET(lats)) THEN BEGIN
+    IF NOT KEYWORD_SET(Y) THEN Y = INDGEN(s(2))
+    IF NOT KEYWORD_SET(X) THEN X = INDGEN(s(1))
+    IF INTERPOLATE eq 1 and n_elements(MISSING) eq 1 then begin
+        ii = where(tab eq missing, cc)
+        if cc gt 0 then message,'Probleme : interpolation impossible avec des missing data...'
+    endif
+    tab_int=INTERPOLATE(tab,X,Y,/GRID)
+ENDIF ELSE tab_int = tab
+
+;---- Gestion des limites
+
+IF NOT KEYWORD_set(limits) THEN BEGIN
+    limits = [latmin,lonmin,latmax,lonmax]
+ENDIF
+
+;---- Gestion des intervalles en x et y pour les tick mark des 2 axes
+IF n_elements(xaxis_interval) EQ 0 THEN xaxis_interval=MAX([0,fix(((limits(3)-limits(1))/5.)/10.)])*10
+IF n_elements(yaxis_interval) EQ 0 THEN yaxis_interval=MAX([0,fix(((limits(2)-limits(0))/5.)/10.)])*10
+
+;------------------------------------------------------------
+;    Transformation of the data to a map / to maps
+;------------------------------------------------------------
+
+
+IF s(3) EQ 1 THEN BEGIN
+                                ;-- On est dans le cas ou on a deja
+                                ;   mis les valeurs en equivalent
+                                ;   palette de couleurs 
+    visu=tab_int
+
+
+                                ;-- Autrement, on projette les valeurs
+                                ;   sur la palette de couleurs 
+ENDIF ELSE BEGIN
+    IF N_elements(MISSING) eq 1 THEN BEGIN
+        valid = WHERE(tab_int NE missing, cc)
+        if (cc eq 0) then begin
+            print,'!Aucune bonne donnees...'
+            valid = lindgen(n_elements(tab_int))
+        endif
+    ENDIF ELSE valid = lindgen(n_elements(tab_int))
+
+                                ;-- On recherche les valeurs min et
+                                ;   max dans le tableau 
+    fixed_range = 1
+    IF n_elements(vmin_) eq 0 THEN BEGIN
+        vmin=MIN(tab_int(valid))
+        fixed_range = 0
+    ENDIF ELSE vmin = vmin_
+    IF n_elements(vmax_) eq 0 THEN BEGIN
+        vmax=MAX(tab_int(valid))
+        fixed_range = 0
+    ENDIF ELSE vmax = vmax_
+
+                                ;--- On limite le min/max calcule
+                                ;    par x% selon histogramme des val.
+    if fixed_range eq 0 and limit_minmax_percent gt 0 then begin
+        bin = (vmax-vmin)/50.
+        hist = HISTOGRAM(tab_int[valid],BINSIZE=bin,OMIN=omin)
+        chist = LONG(hist)
+        FOR p=1, N_ELEMENTS(hist)-1 DO chist[p] = chist[p-1 ]+ hist[p]
+        chist = chist/FLOAT(MAX(chist))
+        ppp = limit_minmax_percent/100.
+        tempo = MIN(ABS(chist-ppp),pc05) & pc05 = omin + pc05*bin
+        tempo = MIN(ABS(chist-(1.-ppp)),pc95) & pc95 = omin + pc95*bin
+        print,'Limites calcule (',+auto_string(limit_minmax_percent,0)+'% de l hist.) : ', pc05,pc95
+        print,'min / max reels :', vmin,vmax
+        vmin = pc05
+        vmax = pc95
+    endif
+ 
+    if sature_minmax then begin
+        ii = WHERE(tab_int(valid) lt vmin , cc)
+        if cc gt 0 then tab_int(valid(ii)) = vmin
+        ii = WHERE(tab_int(valid) gt vmax, cc)
+        if cc gt 0 then tab_int(valid(ii)) = vmax
+    endif
+
+    IF N_elements(MISSING) eq 1 THEN $
+      notvalid = WHERE(tab_int lt vmin or tab_int gt vmax or tab_int eq missing, cc) $
+    else notvalid = WHERE(tab_int lt vmin or tab_int gt vmax, cc)  
+    ;--- Defines map
+    IF NOT(discr_pal) THEN BEGIN
+        visu=BYTE( (first_col+(tab_int-vmin)*(nb_col)/(vmax-vmin)) < (nb_col+first_col-1) )
+    ENDIF ELSE BEGIN
+        ;-- for discrete palette
+        visu = fltarr(n_elements(tab_int(*,0)),n_elements(tab_int(0,*)))
+        IF (n_elements(val_interval) NE 0) THEN nb_interval = fix((vmax-vmin)/val_interval)
+        ;---
+        FOR i=0,nb_interval-1 DO BEGIN
+            ;--
+            vlim1 = vmin + (i)*(vmax-vmin)/nb_interval
+            vlim2 = vmin + (i+1)*(vmax-vmin)/nb_interval
+            IF ((n_elements(val_interval) NE 0)  AND (discr_pal NE 1)) THEN BEGIN
+                vlim1 = vmin + val_interval*i
+                vlim2 = vmin + val_interval*(i+1)
+            ENDIF
+            IF i EQ nb_interval-1 THEN vlim2 = vmax
+            ;--
+            FOR j = 0, n_elements(tab_int(*,0))-1 DO BEGIN
+                ;-- Put array in dicrete parts
+                tt =  where(((tab_int(j,*)) GE (vlim1) AND $ 
+                            ((tab_int(j,*)) LE (vlim2))), oo)
+                ;-- Defines color for this part
+                IF oo NE 0 THEN BEGIN
+                    visu(j,tt)=BYTE(first_col+(i+1)*(nb_col)/nb_interval)
+                ENDIF
+            ENDFOR
+            ;---
+        ENDFOR
+    ENDELSE
+    if cc gt 0 then visu(notvalid) = badcolor
+
+ENDELSE
+
+
+;------------------------------------------------------------
+;     Definition of the map position on the window
+;------------------------------------------------------------
+
+IF NOT KEYWORD_SET(pos) THEN BEGIN
+                                ;-- Cas ou p.multi non definit..
+    if (!p.multi(1)*!p.multi(2) eq 0) then begin
+
+                                ;-- On veut une barre de couleur
+        IF (ok_colbar) THEN BEGIN
+            if (VERTICBAR eq 1) THEN pos=[0.02,0.05,0.95,0.98] ELSE $
+              pos=[0.02,0.06,0.98,0.98]
+
+                                ;-- Pas de barre de couleur
+        ENDIF ELSE BEGIN
+            pos=[0.02,0.05,0.98,0.98] 
+        ENDELSE
+
+                                ;--- Cas p.multi definit: MAIS NE
+                                ;    MARCHE PAS POUR LE MOMENT!! donc
+                                ;    on fait comme precedement...
+    endif else begin
+                                ;-- On veut une barre de couleur
+        IF (ok_colbar) THEN BEGIN
+            if (VERTICBAR eq 1) THEN pos=[0.02,0.05,0.95,0.98] ELSE $
+              pos=[0.02,0.06,0.98,0.98]
+
+                                ;-- Pas de barre de couleur
+        ENDIF ELSE BEGIN
+            pos=[0.02,0.05,0.98,0.98] 
+        ENDELSE
+
+    endelse 
+ENDIF
+
+;--------------------
+; Initialize MAP position
+;--------------------
+;
+POSM = POS
+decal_map = 0
+thick_bar = 0
+
+;---- Traitement de la legende des axes
+IF plot_axis EQ 0 THEN BEGIN
+    space_legy = 0.
+    space_legx = 0.
+ENDIF ELSE BEGIN         
+    space_legx = (pos(3)-pos(1))/40 + 0.05
+    space_legy = (pos(3)-pos(1))/15 + 0.01
+ENDELSE
+                                ;- position of the map (POSM)
+POSM(0) = POS(0) + space_legx
+POSM(1) = POS(1) + space_legy
+                                
+;-- barre de couleur presente et automatique 
+IF (ok_colbar and n_elements(colbar) eq 1) THEN BEGIN
+                                ;----------------
+                                ; Horizontal bar case
+                                ;----------------
+    IF (verticbar EQ 0) THEN BEGIN
+
+                                ;- space for script, tide bar
+        IF plot_axis EQ 0 THEN BEGIN
+            space_legy = 0.01
+            space_legx = 0.
+        ENDIF ELSE BEGIN           
+            space_legx = (pos(3)-pos(1))/40 + 0.05
+            space_legy = (pos(3)-pos(1))/15 + 0.01
+        ENDELSE
+                                ;-
+        thick_bar = (pos(3)-pos(1))/25 + 0.004
+        decal_map = 0.025
+                                ;- position of the map (POSM)
+        POSM(0) = POS(0) + space_legx
+        POSM(1) = POS(1) + decal_map + thick_bar + space_legy
+
+                                ;----------------
+                                ; Vertical bar case
+                                ;----------------
+    ENDIF ELSE BEGIN
+                                ;- space for script, tide bar
+        IF plot_axis EQ 0 THEN BEGIN
+            space_legy = space_legx
+            space_legx = 0.
+        ENDIF ELSE BEGIN
+            space_legx = (pos(2)-pos(0))/15 + 0.01
+            space_legy = space_legx*2
+        ENDELSE
+                                ;-
+        thick_bar = (pos(2)-pos(0))/34 + 0.004
+        decal_map = (pos(2)-pos(0))/30 + 0.002
+                                ;- position of the map (POSM)
+        POSM(0) = POS(0) + space_legy
+        POSM(1) = POS(1) + space_legx
+        POSM(2) = POS(2) - decal_map - thick_bar
+    ENDELSE 
+ENDIF 
+
+map_set,y_center,x_center,rotation,limit=limits,NOBORDER=1,TITLE=title,$
+  POSITION=POSM,mollweide=mollweide,noerase=noerase,$
+  col=col_text,stereographic=stereographic
+
+;------------------------------------------------------------
+;         Creation de l'image
+;------------------------------------------------------------
+
+warp=map_image(visu,xx,yy,xs,ys,compress=1,latmin=latmin,latmax=latmax,$
+               lonmin=lonmin,lonmax=lonmax,missing=badcolor,scale=0.04)
+
+tv,warp,xx,yy,xsize=xs,ysize=ys
+
+;-- Dessin des cotes des terres emergees 
+IF NOT KEYWORD_SET(NOCOAST) THEN MAP_CONTINENTS,MLINETHICK=mlinethick,/COAST,col=col_text
+
+;-- Dessin de la grille
+
+IF KEYWORD_SET(grid) THEN map_grid,color = col_text,lons=lon_bord,lats=lat_bord,glinestyle = 1, glinethick = axis_thick
+
+;------------------------------------------------------------
+;         Rajout de points sur la carte (stations)
+;------------------------------------------------------------
+
+if KEYWORD_SET(addpt) THEN BEGIN
+;    print,'Add points on the map !'
+    tags = strlowcase(tag_names(addpt))
+    npt = n_elements(addpt.lon)
+    if n_elements(addpt.lat) ne npt then message,'Erreur add point: dim lat/lon'
+    sym = replicate(3,npt)
+    foo = where(tags eq 'sym',cc)
+    if cc eq 1 then if (n_elements(addpt.sym) gt 0 and n_elements(addpt.sym) lt npt) then $
+      print,'Erreur add point: dim de sym !' else sym = addpt.sym
+    colsym = replicate(0,npt)
+    foo = where(tags eq 'colsym',cc)
+    if cc eq 1 then if (n_elements(addpt.colsym) gt 0 and n_elements(addpt.colsym) lt npt) then $
+      print,'Erreur add point: taille de symsize !' else colsym = addpt.colsym
+    symsize = replicate(1.,npt)
+    foo = where(tags eq 'symsize',cc)
+    if cc eq 1 then if (n_elements(addpt.symsize) gt 0 and n_elements(addpt.symsize) lt npt) then $
+      print,'Erreur add point: taille de symsize !' else symsize = addpt.symsize
+    fill = replicate(1,npt)
+    foo = where(tags eq 'fill',cc)
+    if cc eq 1 then if (n_elements(addpt.fill) gt 0 and n_elements(addpt.fill) lt npt) then $
+      print,'Erreur add point: taille de fill !' else fill = addpt.fill
+    thick = replicate(1,npt)
+    foo = where(tags eq 'thick',cc)
+    if cc eq 1 then if (n_elements(addpt.thick) gt 0 and n_elements(addpt.thick) lt npt) then $
+      print,'Erreur add point: taille de thick !' else thick = addpt.thick
+    for i=0,npt-1 do begin
+        ccg_symbol,sym=sym(i),fill=fill(i),thick=thick(i)
+        plots,addpt.lon(i),addpt.lat(i),$
+          psym=8,symsize=symsize(i),color=colsym(i) 
+    endfor
+ENDIF
+;
+;------------------------------------------------------------
+;    CREATE AXES
+;------------------------------------------------------------
+;
+;--- Cadre
+IF plot_axis GT 0 THEN BEGIN
+    ;---
+    ;plot,[limits(1),limits(3)],[limits(0),limits(2)],$
+                                ;  POS=pos,/NODATA,/NORMAL,charthick = leg_thick, XSTYLE=1,YSTYLE=1,/NOERASE,ytit=ytit,xtit=xtit,$
+                                ;  col=col_text,charsize=leg_charsize/1.5,XTICKS=xaxis_interval,YTICKS=yaxis_interval,XTICKFORMAT='(I4,"°")',YTICKFORMAT='(I4,"°")'
+    IF n_elements(axis_charsize) EQ 0 THEN BEGIN
+        axis_charsize=(pos(3)-pos(1))*1.6+0.3
+        IF verticbar THEN axis_charsize=(pos(2)-pos(0))*1.2 + 0.3
+    ENDIF
+    ;-
+    plot,[limits(1),limits(3)],[limits(0),limits(2)],$
+      POS=posm,/NODATA,/NORMAL,charthick = leg_thick, XSTYLE=1,YSTYLE=1,/NOERASE,ytit=ytit,xtit=xtit,$
+      col=col_text,charsize=axis_charsize,ticklen=0,$
+      XTICKINTERVAL=xaxis_interval,YTICKINTERVAL=yaxis_interval,$
+      XTICKFORMAT='(I4,"°")',YTICKFORMAT='(I4,"° ")',$
+      XMINOR=1,YMINOR=1,XTHICK=axis_thick,YTHICK=axis_thick
+    ;---
+    wtickname = replicate(' ',60)
+    ;--- interior tick
+    IF ((plot_axis EQ 1) OR (plot_axis EQ 3)) THEN BEGIN
+        plot,[limits(1),limits(3)],[limits(0),limits(2)],$
+          POS=posm,/NODATA,/NORMAL, XSTYLE=1,YSTYLE=1,/NOERASE,$
+          col=col_text,ticklen=0.02,$
+          XTICKINTERVAL=xaxis_interval,YTICKINTERVAL=yaxis_interval,$
+          XMINOR=1,YMINOR=1,$
+          XTICKNAME=wtickname,YTICKNAME=wtickname,XTHICK=axis_thick,YTHICK=axis_thick
+    ENDIF
+    ;--- exterior tick
+    IF ((plot_axis GE 2) OR (plot_axis EQ 3)) THEN BEGIN
+        plot,[limits(1),limits(3)],[limits(0),limits(2)],$
+          POS=posm,/NODATA,/NORMAL, XSTYLE=1,YSTYLE=1,/NOERASE,$
+          col=col_text,ticklen=-0.02,$
+          XTICKINTERVAL=xaxis_interval,YTICKINTERVAL=yaxis_interval,$
+          XMINOR=1,YMINOR=1,$
+          XTICKNAME=wtickname,YTICKNAME=wtickname,XTHICK=axis_thick,YTHICK=axis_thick
+    ENDIF
+ENDIF
+;
+;------------------------------------------------------------
+;   PLOT COLORBAR
+;------------------------------------------------------------
+;
+IF (n_elements(colbar) NE 0) THEN BEGIN
+    add_ctbl = 1
+    ;
+    ;-- Position de la barre de couleurs
+    ;
+    ;-- Si colbar contient 4 elements, ce
+    ;   sont les positions de la barre 
+    IF (n_elements(colbar) EQ 4) THEN pos_colbar = colbar ELSE BEGIN
+        ;-- Sinon, position fixee et selon
+        ;   barre verticale/horiz. 
+        IF ((n_elements(colbar) EQ 1) AND (colbar(0) NE 0)) THEN BEGIN
+            ;---
+            IF (verticbar eq 0) THEN BEGIN
+                pos_colbar = [posm[0],pos[1]+decal_map,posm[2],pos[1]+decal_map+thick_bar]
+            ENDIF ELSE BEGIN
+                pos_colbar = [pos[2]- thick_bar - decal_map/2. ,posm[1],pos[2]- decal_map/2.,posm[3]]
+            ENDELSE
+            ;---
+        ENDIF ELSE add_ctbl = 0
+    ENDELSE
+    ;
+    ;-- Dessin de la barre de couleurs
+    ;
+    IF add_ctbl THEN BEGIN
+        PEYL_DRAWCTBL,vmin=vmin,vmax=vmax,pos=pos_colbar,$
+          verticbar=verticbar,TIT=leg_title,$
+          NB_INTERVAL=nb_interval,VAL_INTERVAL=val_interval,$
+          col_text=col_text,FIRST_COL=first_col,NB_COL=nb_col,$
+          charsize=leg_charsize,charthick=leg_thick,format=leg_format,discr_pal=discr_pal,$
+          thick = axis_thick,tickname_interval=leg_tickname_interval
+    ENDIF
+    ;---
+ENDIF  
+
+END
+;-

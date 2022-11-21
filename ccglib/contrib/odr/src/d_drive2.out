@@ -1,0 +1,92 @@
+ ******************************************************* 
+ * ODRPACK VERSION 2.01 OF 06-19-92 (DOUBLE PRECISION) * 
+ ******************************************************* 
+
+
+ *** INITIAL SUMMARY FOR FIT BY METHOD OF ODR ***
+
+ --- PROBLEM SIZE:
+            N =    20          (NUMBER WITH NONZERO WEIGHT =    20)
+           NQ =     1
+            M =     2
+           NP =     5          (NUMBER UNFIXED =     5)
+
+ --- CONTROL VALUES:
+          JOB = 00001
+              = ABCDE, WHERE
+                       A=0 ==> FIT IS NOT A RESTART.
+                       B=0 ==> DELTAS ARE INITIALIZED TO ZERO.
+                       C=0 ==> COVARIANCE MATRIX WILL BE COMPUTED USING
+                               DERIVATIVES RE-EVALUATED AT THE SOLUTION.
+                       D=0 ==> DERIVATIVES ARE ESTIMATED BY FORWARD DIFFERENCES.
+                       E=1 ==> METHOD IS IMPLICIT ODR.
+       NDIGIT = *****          (ESTIMATED BY ODRPACK)
+       TAUFAC =     1.00D+00
+
+ --- STOPPING CRITERIA:
+        SSTOL =     0.00D+00   (SUM OF SQUARES STOPPING TOLERANCE)
+       PARTOL =     1.00D+00   (PARAMETER STOPPING TOLERANCE)
+        MAXIT =   100          (MAXIMUM NUMBER OF ITERATIONS)
+
+ --- INITIAL SUM OF SQUARED WEIGHTED DELTAS =                    0.00000000D+00
+         INITIAL PENALTY FUNCTION VALUE     =   8.39823392D-01
+                 PENALTY TERM               =   8.39823392D-01
+                 PENALTY PARAMETER          =   1.0D+01
+
+ --- FUNCTION PARAMETER SUMMARY:
+
+       INDEX         BETA(K)    FIXED           SCALE    DERIVATIVE
+                                                          STEP SIZE
+         (K)                  (IFIXB)          (SCLB)        (STPB)
+
+           1 -1.00000000D+00       NO  1.00000000D+00     +Infinity
+           2 -3.00000000D+00       NO  3.33333333D-01     +Infinity
+           3  9.00000000D-02       NO  1.11111111D+01     +Infinity
+           4  2.00000000D-02       NO  5.00000000D+01     +Infinity
+           5  8.00000000D-02       NO  1.25000000D+01     +Infinity
+
+ --- EXPLANATORY VARIABLE AND DELTA WEIGHT SUMMARY:
+
+       INDEX      X(I,J)  DELTA(I,J)    FIXED     SCALE    WEIGHT    DERIVATIVE
+                                                                      STEP SIZE
+       (I,J)                          (IFIXX)    (SCLD)      (WD)        (STPD)
+
+         1,1   5.000D-01   0.000D+00       NO  2.00D+00  1.00D+00     +Infinity
+         N,1  -3.440D+00   0.000D+00       NO  2.91D-01  1.00D+00     +Infinity
+ 
+         1,2  -1.200D-01   0.000D+00       NO  8.33D+00  1.00D+00     +Infinity
+         N,2  -4.860D+00   0.000D+00       NO  2.06D-01  1.00D+00     +Infinity
+
+ *** FINAL SUMMARY FOR FIT BY METHOD OF ODR ***
+
+ --- STOPPING CONDITIONS:
+         INFO = 60042
+              = ABCDE, WHERE A NONZERO VALUE FOR A GIVEN DIGIT INDICATES AN
+                       ABNORMAL STOPPING CONDITION.
+                       A=6 ==> NUMERICAL INSTABILITIES HAVE BEEN DETECTED,
+                               POSSIBLY INDICATING A DISCONTINUITY IN THE
+                               DERIVATIVES OR A POOR POOR CHOICE OF PROBLEM
+                               SCALE OR WEIGHTS.
+        NITER =     3          (NUMBER OF ITERATIONS)
+         NFEV =   336          (NUMBER OF FUNCTION EVALUATIONS)
+        IRANK =     5          (RANK DEFICIENCY)
+        RCOND =     0.00D+00   (INVERSE CONDITION NUMBER)
+        ISTOP =     0          (RETURNED BY USER FROM SUBROUTINE FCN)
+
+ --- FINAL SUM OF SQUARED WEIGHTED DELTAS =                     0.00000000D+00
+         FINAL PENALTY FUNCTION VALUE     =               NaN
+               PENALTY TERM               =               NaN
+               PENALTY PARAMETER          =    1.0D+03
+
+ --- RESIDUAL STANDARD DEVIATION          =                     0.00000000D+00
+         DEGREES OF FREEDOM               =   20
+
+ --- ESTIMATED BETA(J), J = 1, ..., NP:
+
+                     BETA      S.D. BETA    ---- 95%  CONFIDENCE INTERVAL ----
+
+       1  -1.00000000D+00        DROPPED
+       2  -3.00000000D+00        DROPPED
+       3   9.00000000D-02        DROPPED
+       4   2.00000000D-02        DROPPED
+       5   8.00000000D-02        DROPPED

@@ -1,0 +1,137 @@
+;+
+; NAME:
+;	VP
+;
+; PURPOSE:
+;	
+;	This procedure is designed to plot vertical profiles from CCGG
+;	sampling locations.  The procedure reads merged files containing
+;	analysis results from a single profile.  
+;
+;	At present, the merged files contain analysis results for 
+;
+;		CO2, CO2C13, CO2O18, CH4, CO, H2, N2O, SF6
+;
+;	NOTE:
+;
+;	Use the left mouse button to move FORWARD one page.
+;	Use the middle mouse button to move BACKWARD one page.
+;	Use the right mouse button to EXIT procedure.
+;
+;	NOTE:
+;
+;	All RETAINED values are plotted as an open square and are 
+;	joined by a line.  All NON-BACKGROUND values are plotted 
+;	using a green plus. All REJECTED values are plotted using
+;	a red asterisk.
+;
+; CATEGORY:
+;	Aircraft Sampling
+;
+; CALLING SEQUENCE:
+;	VP,	site='car'
+;
+;	VP,	site='car',sp=['co2','co2c13','co2o18']
+;
+;	VP, site='car',sp='ch4',startdate='1999-01',stopdate='1999-02'
+;
+;	VP, site='car',sp='co2',startdate='1999-11-10.1700',stopdate='1999-11-10.1800'
+;
+;	VP, site='car',sp=['co2','ch4','co','h2','n2o','sf6'],startdate='1999'
+;
+;	VP, site='pfa',sp='co',row=4,col=4
+;
+; INPUTS:
+;	site:		This keyword specifies the 3-letter code of the CCGG 
+;				aircraft sampling program.  This keyword must be specified.
+;
+;	sp:			This keyword specifies one or more trace gas species.
+;				"sp" may be a string constant or vector, e.g., sp='co2',
+;				sp=['co2','ch4','co'].
+;
+;				The current list of species include 
+;
+;				'co2','co2c13','co2o18','ch4','co','h2','n2o','sf6'
+;
+;				If "sp" is not specified, all species will be plotted.
+;
+; OPTIONAL INPUT PARAMETERS:
+;	help:		Setting this keyword (help=1 or /help) produces this 
+;				documentation file.
+;
+;	startdate:	This keyword specifies the starting date for plotting
+;				profiles.  The format of this keyword is based on the
+;				following convention "yyyy-mm-dd.hhmm".  Users may
+;				specify the starting date as 
+;
+;					startdate='1999'
+;					startdate='1999-08'
+;					startdate='1999-08-06'
+;					startdate='1999-08-06.1624'
+;
+;	stopdate:	This keyword specifies the ending date for plotting
+;				profiles.  The format of this keyword is based on the
+;				following convention "yyyy-mm-dd.hhmm".  Users may
+;				specify the ending date as 
+;
+;					startdate='1999'
+;					startdate='1999-12'
+;					startdate='1999-12-09'
+;					startdate='1999-12-09.1755'
+;
+;
+;	row:		Use this keyword to specify number of rows.
+;	col:		Use this keyword to specify number of columns.
+;
+;				NOTE:  If plotting more than one species then
+;				the number of species must be a multiple of
+;				row*cols.  For example, when plotting CO2 and CH4
+;				row*cols must be 2,4,6,...
+;
+;	plotthick:  This keyword specifies the line thickness of the axes and
+;				tick marks.  Default=1
+;
+;	linethick:  This keyword specifies the line thickness used to connect
+;				individual measurements of a profile. Default=2
+;
+;	charsize:	This keyword specifies the chararcter size of titles and
+;				plot labels.  Default=2.25
+;
+;	charthick:	This keyword specifies the chararcter thickness of titles
+;				and	plot labels.  Default=1.5
+;
+;	symsize:	This keyword specifies the symbol size used to plot
+;				individual measurements of a profile.  Default=1.0
+;
+;	dev:		This keyword specifies the printing device to which the 
+;				specified graphs will be sent.
+;
+; OUTPUTS:
+;	None.
+;
+; COMMON BLOCKS:
+;	None.
+;
+; SIDE EFFECTS:
+;	None.
+;
+; RESTRICTIONS:
+;	None.
+;
+; PROCEDURE:
+;	Examples:
+;
+;
+;	To plot a single profile for all species ...
+;
+;		IDL> VP, site='car',startdate='1999-11-10.1700',stopdate='1999-11-10.1800'
+;
+;	To plot all 1999 CO2 and CH4 profiles for CAR ...
+;
+;		IDL> VP, site='car',sp=['co2','ch4'],startdate='1999'
+;
+;		
+; MODIFICATION HISTORY:
+;	Written,  KAM, May 1996.
+;	Modified, KAM, January 2000.
+;-
